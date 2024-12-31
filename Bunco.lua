@@ -5557,7 +5557,7 @@ SMODS.Tag{ -- Triple
     in_pool = function() return G.GAME.used_vouchers['v_bunc_pin_collector'] end
 }
 
---[[
+
 SMODS.Tag{ -- Glitter
     key = 'glitter', loc_txt = loc.glitter_tag,
 
@@ -5594,9 +5594,9 @@ SMODS.Tag{ -- Glitter
     pos = coordinate(1),
     atlas = 'bunco_tags_edition',
 }
---]]
 
---[[
+
+
 SMODS.Tag{ -- Fluorescent
     key = 'fluorescent', loc_txt = loc.fluorescent_tag,
 
@@ -5641,7 +5641,7 @@ SMODS.Tag{ -- Fluorescent
         end
     end
 }
---]]
+
 
 SMODS.Tag{ -- Chips
     key = 'chips', loc_txt = loc.chips,
@@ -5730,7 +5730,7 @@ SMODS.Tag{ -- Xmult
     in_pool = function() return false end
 }
 
---[[
+
 SMODS.Tag{ -- Xchip
     key = 'xchips', loc_txt = loc.xchips,
 
@@ -5759,7 +5759,7 @@ SMODS.Tag{ -- Xchip
 
     in_pool = function() return false end
 }
---]]
+
 
 SMODS.Tag{ -- Filigree
     key = 'filigree', loc_txt = loc.filigree,
@@ -6027,7 +6027,7 @@ SMODS.Tag{ -- Rental
 
 -- Editions
 
---[[
+
 SMODS.Shader({key = 'glitter', path = 'glitter.fs'})
 SMODS.Sound({key = 'glitter', path = 'glitter.ogg'})
 
@@ -6048,7 +6048,7 @@ SMODS.Edition{
 
     shader = 'glitter'
 }
---]]
+
 
 SMODS.Shader({key = 'fluorescent', path = 'fluorescent.fs'})
 SMODS.Sound({key = 'fluorescent', path = 'fluorescent.ogg'})
