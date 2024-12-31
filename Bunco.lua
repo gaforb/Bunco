@@ -3121,6 +3121,7 @@ create_joker({ -- Dynasty
     unlocked = true
 })
 
+--[[				--TODO: make this opposite to Fondue
 create_joker({ -- Magic Wand
     type = 'Exotic',
     name = 'Magic Wand', position = 8,
@@ -3163,6 +3164,7 @@ create_joker({ -- Magic Wand
 		end
 	end
 })
+--]]
 
 --[[
 create_joker({ -- Starfruit
