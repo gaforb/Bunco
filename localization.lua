@@ -1971,10 +1971,10 @@ return {
         ['en-us'] = {
             ['name'] = 'Magic Wand',
             ['text'] = {
-                [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
-                [2] = 'per {C:attention}consecutive{} played hand',
-                [3] = 'containing a {C:attention}Spectrum{}',
-                [4] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                [1] = '{C:green}#1# in #2#{} chance for',
+                [1] = 'Scored {C:spades}Spades{} and {C:clubs}Clubs{}',
+                [3] = 'to be converted',
+                [4] = 'to {C:bunc_halberds}Halberds'
             }
         },
         ['es_419'] = {
