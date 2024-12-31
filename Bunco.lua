@@ -3138,29 +3138,30 @@ create_joker({ -- Magic Wand
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-           if context.individual and context.cardarea == G.play then
+    	if context.individual and context.cardarea == G.play then
 
-            local other_card = context.other_card
+	local other_card = context.other_card
 
-            if context.other_card:is_suit('Spades') or context.other_card:is_suit('Clubs') then
+        if context.other_card:is_suit('Spades') or context.other_card:is_suit('Clubs') then
 		if pseudorandom('magic_wand'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
-            	enable_exotics()
+            		enable_exotics()
 
-            	for i = 1, #context.scoring_hand do
+            		for i = 1, #context.scoring_hand do
                 	event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[i]:flip(); play_sound('card1', 1); context.scoring_hand[i]:juice_up(0.3, 0.3); return true end })
-            	end
+            		end
 
-            	for i = 1, #context.scoring_hand do
+            		for i = 1, #context.scoring_hand do
                 	event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[i]:change_suit('bunc_Halberds'); return true end })
-            	end
+            		end
 
-            	for i = 1, #context.scoring_hand do
+            		for i = 1, #context.scoring_hand do
                 	event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[i]:flip(); play_sound('tarot2', 1, 0.6); big_juice(card); context.scoring_hand[i]:juice_up(0.3, 0.3); return true end })
-            	end
+            		end
 
-            delay(0.7 * 1.25)
-        end
-    end
+            		delay(0.7 * 1.25)
+			end
+		end
+	end
 })
 
 --[[
