@@ -713,6 +713,7 @@ create_joker({ -- Cassette
     end
 })
 
+--[[
 create_joker({ -- Mosaic
     name = 'Mosaic', position = 3,
     vars = {{mult = 6}},
@@ -752,6 +753,7 @@ create_joker({ -- Mosaic
         end
     end
 })
+--]]
 
 create_joker({ -- Voxel
     name = 'Voxel', position = 4,
@@ -802,6 +804,7 @@ create_joker({ -- Voxel
     end
 })
 
+--[[
 create_joker({ -- Crop Circles
     name = 'Crop Circles', position = 5,
     rarity = 'Common', cost = 4,
@@ -872,7 +875,9 @@ create_joker({ -- Crop Circles
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Xray
     name = 'Xray', position = 6,
     vars = {{bonus = 0.2}, {xmult = 1}},
@@ -907,7 +912,9 @@ create_joker({ -- Xray
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Dread
     name = 'Dread', position = 7,
     vars = {{trash_list = {}}, {level_up_list = {}}},
@@ -984,6 +991,7 @@ create_joker({ -- Dread
         end
     end
 })
+--]]
 
 create_joker({ -- Prehistoric
     name = 'Prehistoric', position = 8,
@@ -1031,6 +1039,7 @@ create_joker({ -- Prehistoric
     end
 })
 
+--[[
 create_joker({ -- Linocut
     name = 'Linocut', position = 9,
     rarity = 'Uncommon', cost = 4,
@@ -1047,7 +1056,9 @@ create_joker({ -- Linocut
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Ghost Print
     name = 'Ghost Print', position = 10,
     vars = {{last_hand = 'Nothing'}},
@@ -1079,7 +1090,9 @@ create_joker({ -- Ghost Print
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Loan Shark
     name = 'Loan Shark', position = 11,
     vars = {{dollars = 50}, {cost = -100}},
@@ -1108,7 +1121,9 @@ create_joker({ -- Loan Shark
         card:set_cost()
     end
 })
+--]]
 
+--[[
 create_joker({ -- Basement
     name = 'Basement', position = 12,
     rarity = 'Rare', cost = 8,
@@ -1132,6 +1147,7 @@ create_joker({ -- Basement
         end
     end
 })
+--]]
 
 create_joker({ -- Shepherd
     name = 'Shepherd', position = 13,
@@ -1266,6 +1282,7 @@ create_joker({ -- JMJB
     end
 })
 
+--[[
 create_joker({ -- Dogs Playing Poker
     name = 'Dogs Playing Poker', position = 16,
     vars = {{xmult = 2.5}},
@@ -1301,6 +1318,7 @@ create_joker({ -- Dogs Playing Poker
         end
     end
 })
+--]]
 
 create_joker({ -- Righthook
     name = 'Righthook', position = 17,
@@ -1326,6 +1344,7 @@ create_joker({ -- Righthook
     end
 })
 
+--[[
 create_joker({ -- Fiendish
     name = 'Fiendish', position = 18,
     vars = {{odds = 3}},
@@ -1349,7 +1368,9 @@ create_joker({ -- Fiendish
     end,
     purist = false
 })
+--]]
 
+--[[
 create_joker({ -- Carnival
     name = 'Carnival', position = 19,
     vars = {{ante = -huge_number}},
@@ -1384,7 +1405,9 @@ create_joker({ -- Carnival
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Sledgehammer
     name = 'Sledgehammer', position = 20,
     vars = {{plus_xmult = 1}, {div_chance_denom = 4}},
@@ -1426,6 +1449,7 @@ create_joker({ -- Sledgehammer
         end
     end
 })
+--]]
 
 create_joker({ -- Doorhanger
     name = 'Doorhanger', position = 21,
@@ -1452,6 +1476,7 @@ create_joker({ -- Doorhanger
     end
 })
 
+--[[
 create_joker({ -- Fingerprints
     name = 'Fingerprints', position = 22,
     vars = {{bonus = 50}, {scoring_card_set = {}}},
@@ -1480,7 +1505,9 @@ create_joker({ -- Fingerprints
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Zero Shapiro
     name = 'Zero Shapiro', position = 23,
     vars = {{bonus = 0.3}, {amount = 1}},
@@ -1526,7 +1553,9 @@ create_joker({ -- Zero Shapiro
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Nil Bill
     name = 'Nil Bill', position = 24,
     vars = {{bonus = 5}},
@@ -1540,6 +1569,7 @@ create_joker({ -- Nil Bill
         end
     end
 })
+--]]
 
 create_joker({ -- Bierdeckel
     name = 'Bierdeckel', position = 25,
@@ -1581,6 +1611,7 @@ create_joker({ -- Bierdeckel
     end
 })
 
+--[[
 create_joker({ -- Registration Plate
     name = 'Registration Plate', position = 26,
     vars = {{combination = ''}, {card_list = {}}, {ranks = {}}},
@@ -1649,7 +1680,9 @@ create_joker({ -- Registration Plate
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Slothful
     name = 'Slothful', position = 27,
     vars = {{mult = 9}},
@@ -1689,7 +1722,9 @@ create_joker({ -- Slothful
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Neon
     name = 'Neon', position = 28,
     vars = {{bonus = 0.2}, {xmult = 1}},
@@ -1730,6 +1765,7 @@ create_joker({ -- Neon
         end
     end
 })
+--]]
 
 create_joker({ -- Gameplan
     name = 'Gameplan', position = 29,
@@ -1841,6 +1877,7 @@ create_joker({ -- Conquest
     end
 })
 
+--[[
 create_joker({ -- Hierarchy of Needs
     name = 'Hierarchy of Needs', position = 31,
     vars = {{bonus = 5}, {mult = 20}},
@@ -1908,6 +1945,7 @@ create_joker({ -- Hierarchy of Needs
         end
     end
 })
+--]]
 
 create_joker({ -- Dwarven
     name = 'Dwarven', position = 32,
@@ -2038,6 +2076,7 @@ create_joker({ -- Metallurgist
     end
 })
 
+--[[
 create_joker({ -- Juggalo
     name = 'Juggalo', position = 35,
     custom_vars = function(self, info_queue, card)
@@ -2078,7 +2117,9 @@ create_joker({ -- Juggalo
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Head in the Clouds
     name = 'Head in the Clouds', position = 36,
     vars = {{odds = 3}},
@@ -2129,6 +2170,7 @@ create_joker({ -- Head in the Clouds
         end
     end
 })
+--]]
 
 create_joker({ -- Headshot
     name = 'Headshot', position = 37,
@@ -2227,6 +2269,7 @@ create_joker({ -- Hopscotch
     end
 })
 
+--[[
 create_joker({ -- Pawn
     name = 'Pawn', position = 40,
     rarity = 'Common', cost = 5,
@@ -2263,7 +2306,7 @@ create_joker({ -- Pawn
                                 rank_suffix = SMODS.Ranks[r].card_key
                             else
                                 local ii = (behavior.fixed and rank_data.next[behavior.fixed]) and behavior.fixed or 1
-                                rank_suffix = SMODS.Ranks[rank_data.next[ii]].card_key
+                                rank_suffix = SMODS.Ranks[rank_data.next[ii]]--[[.card_key       --THIS LINE BREAKS COMMENTS
                             end
                             other_card:set_base(G.P_CARDS[suit_prefix .. '_' .. rank_suffix])
                             return true
@@ -2276,6 +2319,7 @@ create_joker({ -- Pawn
         end
     end
 })
+--]]
 
 create_joker({ -- Puzzle Board
     name = 'Puzzle Board', position = 41,
@@ -2462,6 +2506,7 @@ create_joker({ -- Doodle
     end
 })
 
+--[[
 create_joker({ -- Disproportionality
     name = 'Disproportionality', position = 45,
     vars = {{min = 0}, {max = 200}},
@@ -2511,6 +2556,7 @@ create_joker({ -- Disproportionality
         end
     end
 })
+--]]
 
 create_joker({ -- Running Joke
     name = 'Running Joke', position = 46,
@@ -2612,6 +2658,7 @@ create_joker({ -- Rasta
     end
 })
 
+--[[
 create_joker({ -- Critic
     name = 'Critic', position = 49,
     vars = {{xmult = 2}, {fraction = 3}},
@@ -2633,6 +2680,7 @@ create_joker({ -- Critic
         end
     end
 })
+--]]
 
 create_joker({ -- Cellphone
     name = 'Cellphone', position = 50,
@@ -2678,6 +2726,7 @@ create_joker({ -- Cellphone
     end
 })
 
+--[[
 create_joker({ -- Wino
     name = 'Wino', position = 51,
     vars = {{chips = 12}},
@@ -2698,7 +2747,9 @@ create_joker({ -- Wino
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Bounty Hunter
     name = 'Bounty Hunter', position = 52,
     vars = {{bonus = 5}},
@@ -2730,6 +2781,7 @@ create_joker({ -- Bounty Hunter
         end
     end
 })
+--]]
 
 create_joker({ -- Mousetrap
     name = 'Mousetrap', position = 53,
@@ -2879,6 +2931,7 @@ create_joker({ -- Tangram
     end
 })
 
+--[[
 create_joker({ -- Domino
     name = 'Domino', position = 55,
     rarity = 'Rare', cost = 5,
@@ -2964,6 +3017,7 @@ create_joker({ -- Domino
         return self.set_ability(self, card)
     end
 })
+--]]
 
 -- Exotic Jokers
 
@@ -3067,6 +3121,7 @@ create_joker({ -- Dynasty
     unlocked = true
 })
 
+--[[
 create_joker({ -- Magic Wand
     type = 'Exotic',
     name = 'Magic Wand', position = 8,
@@ -3100,7 +3155,9 @@ create_joker({ -- Magic Wand
         end
     end
 })
+--]]
 
+--[[
 create_joker({ -- Starfruit
     type = 'Exotic',
     name = 'Starfruit', position = 9,
@@ -3146,6 +3203,7 @@ create_joker({ -- Starfruit
         end
     end
 })
+--]]
 
 create_joker({ -- Fondue
     type = 'Exotic',
@@ -3234,6 +3292,7 @@ create_joker({ -- ROYGBIV
 
 -- Legendary Jokers
 
+--[[
 create_joker({ -- Rigoletto
     type = 'Exotic',
     name = 'Rigoletto', position = 1,
@@ -3273,6 +3332,7 @@ create_joker({ -- Rigoletto
         end
     end
 })
+--]]
 
 -- Tarots
 
@@ -3633,6 +3693,7 @@ end
 
 -- Polyminoes
 
+--[[
 SMODS.Atlas({key = 'bunco_polyminoes_undiscovered', path = 'Consumables/PolyminoesUndiscovered.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_polyminoes', path = 'Consumables/Polyminoes.png', px = 71, py = 95})
 
@@ -4360,6 +4421,7 @@ SMODS.Consumable{ -- The 8
 
     pos = coordinate(9),
 }
+--]]
 
 -- Exotic suits
 
@@ -5356,6 +5418,7 @@ SMODS.Back{ -- Fairy
     atlas = 'bunco_decks'
 }
 
+--[[
 SMODS.Back{ -- Digital
 	key = 'digital', loc_txt = loc.digital,
 
@@ -5374,6 +5437,7 @@ SMODS.Back{ -- Digital
     pos = coordinate(2),
     atlas = 'bunco_decks'
 }
+--]]
 
 -- Tags
 
@@ -5484,6 +5548,7 @@ SMODS.Tag{ -- Triple
     in_pool = function() return G.GAME.used_vouchers['v_bunc_pin_collector'] end
 }
 
+--[[
 SMODS.Tag{ -- Glitter
     key = 'glitter', loc_txt = loc.glitter_tag,
 
@@ -5520,7 +5585,9 @@ SMODS.Tag{ -- Glitter
     pos = coordinate(1),
     atlas = 'bunco_tags_edition',
 }
+--]]
 
+--[[
 SMODS.Tag{ -- Fluorescent
     key = 'fluorescent', loc_txt = loc.fluorescent_tag,
 
@@ -5565,6 +5632,7 @@ SMODS.Tag{ -- Fluorescent
         end
     end
 }
+--]]
 
 SMODS.Tag{ -- Chips
     key = 'chips', loc_txt = loc.chips,
@@ -5653,6 +5721,7 @@ SMODS.Tag{ -- Xmult
     in_pool = function() return false end
 }
 
+--[[
 SMODS.Tag{ -- Xchip
     key = 'xchips', loc_txt = loc.xchips,
 
@@ -5681,6 +5750,7 @@ SMODS.Tag{ -- Xchip
 
     in_pool = function() return false end
 }
+--]]
 
 SMODS.Tag{ -- Filigree
     key = 'filigree', loc_txt = loc.filigree,
@@ -5948,6 +6018,7 @@ SMODS.Tag{ -- Rental
 
 -- Editions
 
+--[[
 SMODS.Shader({key = 'glitter', path = 'glitter.fs'})
 SMODS.Sound({key = 'glitter', path = 'glitter.ogg'})
 
@@ -5968,6 +6039,7 @@ SMODS.Edition{
 
     shader = 'glitter'
 }
+--]]
 
 SMODS.Shader({key = 'fluorescent', path = 'fluorescent.fs'})
 SMODS.Sound({key = 'fluorescent', path = 'fluorescent.ogg'})
@@ -6085,6 +6157,7 @@ SMODS.Voucher{ -- Shell Game
     atlas = 'bunco_vouchers'
 }
 
+--[[
 SMODS.Voucher{ -- Disguise
     key = 'disguise', loc_txt = loc.disguise,
 
@@ -6120,7 +6193,9 @@ SMODS.Voucher{ -- Masquerade
     pos = coordinate(8),
     atlas = 'bunco_vouchers'
 }
+--]]
 
+--[[
 SMODS.Voucher{ -- Fanny Pack
     key = 'fanny_pack', loc_txt = loc.fanny_pack,
 
@@ -6165,7 +6240,9 @@ SMODS.Voucher{ -- Pin Collector
     pos = coordinate(10),
     atlas = 'bunco_vouchers'
 }
+--]]
 
+--[[
 SMODS.Voucher{ -- Arcade Machine
     key = 'arcade_machine', loc_txt = loc.arcade_machine,
 
@@ -6191,6 +6268,7 @@ SMODS.Voucher{ -- Polybius
     pos = coordinate(12),
     atlas = 'bunco_vouchers'
 }
+--]]
 
 -- Blind Cards
 
@@ -6257,6 +6335,7 @@ end
 
 -- Booster Packs
 
+--[[
 SMODS.Atlas({key = 'bunco_booster_packs_blind', path = 'Boosters/BoostersBlind.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_booster_packs_virtual', path = 'Boosters/BoostersVirtual.png', px = 71, py = 95})
 
@@ -6413,6 +6492,7 @@ for i = 1, 4 do -- Virtual
         atlas = 'bunco_booster_packs_virtual',
     }
 end
+--]]
 
 -- Stickers
 
