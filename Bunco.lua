@@ -12,10 +12,9 @@
 -- Make configs apply immediately
 -- Shell Game should modify tables instead of replacing - see Blind Packs
 
-BUNCOMOD = {loc = {}, vars = {}, funcs = {}, content = SMODS.current_mod}
+BUNCOMOD = {vars = {}, funcs = {}, content = SMODS.current_mod}
 local filesystem = NFS or love.filesystem
 
-local loc = filesystem.load(BUNCOMOD.content.path..'localization.lua')()
 local config = BUNCOMOD.content.config
 
 -- Debug message
@@ -85,20 +84,7 @@ end
 -- Dictionary wrapper
 
 function BUNCOMOD.content.process_loc_text()
-    SMODS.process_loc_text(G.localization.misc.dictionary, 'bunco', loc.dictionary)
-
-    loc.dictionary = G.localization.misc.dictionary.bunco
-
-    -- Other localization
-
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.dictionary.temporary_extra_chips)
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'linked_cards', loc.dictionary.linked_cards)
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'drawn_linked_cards', loc.dictionary.drawn_linked_cards)
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'exotic_cards', loc.exotic_cards)
-    G.P_CENTERS['exotic_cards'] = {key = 'exotic_cards', set = 'Other'}
-
-    BUNCOMOD.loc.exceeded_score = loc.dictionary.exceeded_score
-    BUNCOMOD.loc.chips = loc.dictionary.chips
+    G.P_CENTERS['bunc_exotic_cards'] = {key = 'bunc_exotic_cards', set = 'Other'}
 end
 
 -- Config globals
@@ -113,19 +99,163 @@ end
 
 function BUNCOMOD.content.config_tab()
     return {n = G.UIT.ROOT, config = {r = 0.1, minw = 4, align = "tm", padding = 0.2, colour = G.C.BLACK}, nodes = {
-        create_toggle({label = loc.dictionary.colorful_finishers, ref_table = BUNCOMOD.content.config, ref_value = 'colorful_finishers', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.high_quality_shaders, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'high_quality_shaders', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.double_lovers, ref_table = BUNCOMOD.content.config, ref_value = 'double_lovers', callback = function() BUNCOMOD.content:save_config()
-            if config.double_lovers then
-                G.P_CENTERS.c_lovers.config.max_highlighted = 2
-            else
-                G.P_CENTERS.c_lovers.config.max_highlighted = 1
-            end
-        end}),
-        create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = BUNCOMOD.content.config, ref_value = 'jokerlike_consumable_editions', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.fixed_badges, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_badges', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.fixed_sprites, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_sprites', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.gameplay_reworks, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'gameplay_reworks', callback = function() BUNCOMOD.content:save_config() end})
+        {n = G.UIT.C, config = {r = 0.1, minw = 4, align = "tl", padding = 0.2, colour = G.C.BLACK}, nodes =
+            {
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_colorful_finishers,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_true,
+                                '',
+                                G.localization.misc.dictionary.bunc_colorful_finishers_desc,
+                                G.localization.misc.dictionary.bunc_colorful_finishers_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'colorful_finishers',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_high_quality_shaders,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_true..', '..G.localization.misc.dictionary.bunc_requires_restart,
+                                '',
+                                G.localization.misc.dictionary.bunc_high_quality_shaders_desc,
+                                G.localization.misc.dictionary.bunc_high_quality_shaders_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'high_quality_shaders',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_fixed_sprites,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_true..', '..G.localization.misc.dictionary.bunc_requires_restart,
+                                '',
+                                G.localization.misc.dictionary.bunc_fixed_sprites_desc,
+                                G.localization.misc.dictionary.bunc_fixed_sprites_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'fixed_sprites',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                }
+            }
+        },
+        {n = G.UIT.C, config = {r = 0.1, minw = 4, align = "tc", padding = 0.2, colour = G.C.BLACK}, nodes =
+            {
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                        label = G.localization.misc.dictionary.bunc_gameplay_reworks,
+                        info = {
+                            G.localization.misc.dictionary.bunc_default_true..', '..G.localization.misc.dictionary.bunc_requires_restart,
+                            '',
+                            G.localization.misc.dictionary.bunc_gameplay_reworks_desc,
+                            G.localization.misc.dictionary.bunc_gameplay_reworks_desc_2
+                        },
+                        ref_table = BUNCOMOD.content.config,
+                        ref_value = 'gameplay_reworks',
+                        callback = function() BUNCOMOD.content:save_config()
+                            if config.gameplay_reworks then
+                                G.P_CENTERS.c_lovers.config.max_highlighted = 2
+                            else
+                                G.P_CENTERS.c_lovers.config.max_highlighted = 1
+                            end
+                        end})
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_fixed_badges,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_false,
+                                '',
+                                G.localization.misc.dictionary.bunc_fixed_badges_desc,
+                                G.localization.misc.dictionary.bunc_fixed_badges_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'fixed_badges',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_jokerlike_consumable_editions,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_false,
+                                '',
+                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc,
+                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'jokerlike_consumable_editions',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                }
+            }
+        }
     }}
 end
 
@@ -175,6 +305,17 @@ if config.fixed_sprites then
 
     SMODS.Atlas{key = 'cards_2', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95, prefix_config = {key = false}}
     SMODS.Atlas{key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18, prefix_config = {key = false}}
+
+    G.C['SO_2'] = {
+        Hearts = HEX('ee151b'),
+        Diamonds = HEX('e56b10'),
+        Spades = HEX('5d55a6'),
+        Clubs = HEX('197f77')
+    }
+
+    G.C['SO_1']['Spades'] = HEX('3c4368')
+
+    G.C.SUITS = G.C["SO_" .. (G.SETTINGS.colourblind_option and 2 or 1)]
 
     -- Jokers
 
@@ -312,17 +453,23 @@ if config.fixed_sprites then
 
 end
 
+-- Text icons
+
+local font_replacement = NFS.read(BUNCOMOD.content.path..'assets/fonts/font.ttf')
+love.filesystem.write('font_replacement.ttf', font_replacement)
+G.LANG.font.FONT = love.graphics.newFont('font_replacement.ttf', G.TILESIZE * 10)
+love.filesystem.remove('font_replacement.ttf')
+
 -- Gameplay reworks
 
 if config.gameplay_reworks then
 
-    bunco_gameplay_reworks = true
+    BUNCOMOD.content.config.gameplay_reworks = true
 
     SMODS.Joker:take_ownership('luchador', {
-        loc_txt = loc.luchador,
         loc_vars = function(self, info_queue)
             info_queue[#info_queue + 1] = {key = 'tag_bunc_breaking', set = 'Tag'}
-            return {}
+            return {key = 'j_bunc_luchador'}
         end,
         calculate = function(self, card, context)
             if context.selling_self then
@@ -339,7 +486,9 @@ if config.gameplay_reworks then
     })
 
     SMODS.Joker:take_ownership('red_card', {
-        loc_txt = loc.red_card,
+        loc_vars = function(self, info_queue)
+            return {key = 'j_bunc_red_card'}
+        end,
         calculate = function(self, card, context)
             if context.skipping_booster and not context.blueprint then
                 card.ability.mult = card.ability.mult + (card.ability.extra * G.GAME.pack_choices)
@@ -357,10 +506,9 @@ if config.gameplay_reworks then
     })
 
     SMODS.Tag:take_ownership('boss', {
-        loc_txt = loc.boss,
         loc_vars = function(self, info_queue)
-            info_queue[#info_queue + 1] = {key = 'p_bunc_blind_1', set = 'Other', vars = {G.P_CENTERS.p_bunc_blind_1.config.extra}}
-            return {}
+            info_queue[#info_queue + 1] = {key = 'p_bunc_blind', set = 'Other', vars = {G.P_CENTERS.p_bunc_blind_1.config.extra}}
+            return {key = 'tag_bunc_boss'}
         end,
         config = {type = 'new_blind_choice'},
         apply = function(self, tag, context)
@@ -508,13 +656,9 @@ function Game:start_run(args)
 end
 
 SMODS.Tag:take_ownership('double', {
-    process_loc_text = function(self)
-        SMODS.Tag.process_loc_text(self)
-        SMODS.process_loc_text(G.localization.descriptions.Tag, self.key..'_additional', loc.double)
-    end,
     loc_vars = function(self)
         if G.GAME and G.GAME.used_vouchers['v_bunc_pin_collector'] then
-            return {key = self.key..'_additional'}
+            return {key = 'tag_bunc_double'}
         end
     end,
 })
@@ -525,8 +669,6 @@ SMODS.Challenge:take_ownership('c_mad_world_1', {
         table.insert(self.restrictions.banned_other, {id = 'bl_bunc_cadaver', type = 'blind'})
     end
 })
-
-
 
 -- Joker creation setup
 
@@ -620,7 +762,6 @@ local function create_joker(joker)
         blueprint_compat = joker.blueprint,
         eternal_compat = joker.eternal,
 
-        loc_txt = loc[key],
         process_loc_text = joker.process_loc_text,
 
         config = joker.custom_config or joker.config,
@@ -808,13 +949,9 @@ create_joker({ -- Voxel
 create_joker({ -- Crop Circles
     name = 'Crop Circles', position = 5,
     rarity = 'Common', cost = 4,
-    process_loc_text = function(self)
-        SMODS.Joker.process_loc_text(self)
-        SMODS.process_loc_text(G.localization.descriptions.Joker, self.key..'_additional', loc.crop_circles_exotic)
-    end,
     custom_vars = function(self)
         if G.GAME and G.GAME.Exotic then
-            return {key = self.key..'_additional'}
+            return {key = self.key..'_exotic'}
         end
     end,
     blueprint = true, eternal = true,
@@ -1051,7 +1188,7 @@ create_joker({ -- Linocut
                 event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('card1', 1); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end })
                 event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit); return true end })
                 event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('tarot2', 1, 0.6); big_juice(card); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end })
-                forced_message(loc.dictionary.copied, card, G.C.RED, true)
+                forced_message(G.localization.misc.dictionary.bunc_copied, card, G.C.RED, true)
             end
         end
     end
@@ -1065,7 +1202,7 @@ create_joker({ -- Ghost Print
     custom_vars = function(self, info_queue, card)
         local vars
         if card.ability.extra.last_hand == 'Nothing' then
-            vars = {loc.dictionary.nothing}
+            vars = {G.localization.misc.dictionary.bunc_nothing}
         else
             vars = {G.localization.misc['poker_hands'][card.ability.extra.last_hand]}
         end
@@ -1096,14 +1233,10 @@ create_joker({ -- Ghost Print
 create_joker({ -- Loan Shark
     name = 'Loan Shark', position = 11,
     vars = {{dollars = 50}, {cost = -100}},
-    process_loc_text = function(self)
-        SMODS.Joker.process_loc_text(self)
-        SMODS.process_loc_text(G.localization.descriptions.Joker, self.key..'_additional', loc.loan_shark_full)
-    end,
     custom_vars = function(self, info_queue, card)
         local vars = {card.ability.extra.dollars, card.ability.extra.cost}
         if card.area and card.area.config.collection then
-            return {key = self.key..'_additional', vars = vars}
+            return {key = self.key..'_full', vars = vars}
         else
             return {vars = vars}
         end
@@ -1159,7 +1292,7 @@ create_joker({ -- Shepherd
         if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
             card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.bonus
 
-            forced_message('+'..tostring(card.ability.extra.chips)..' '..loc.dictionary.chips, card, G.C.BLUE, true)
+            forced_message('+'..tostring(card.ability.extra.chips)..' '..G.localization.misc.dictionary.bunc_chips, card, G.C.BLUE, true)
         end
 
         if context.joker_main then
@@ -1397,7 +1530,7 @@ create_joker({ -- Carnival
                     card:juice_up(0.8, 0.8)
                     card.ability.extra.ante = G.GAME.round_resets.ante
                     ease_ante(-1)
-                    forced_message(loc.dictionary.loop, card, G.C.BLACK)
+                    forced_message(G.localization.misc.dictionary.bunc_loop, card, G.C.BLACK)
                     joker_to_destroy:start_dissolve({G.C.BLACK}, nil, 1.6)
                     play_sound('slice1', 0.96+math.random()*0.08)
                 end
@@ -1526,7 +1659,7 @@ create_joker({ -- Zero Shapiro
                 end
 
                 return {
-                    extra = {message = '+X'..card.ability.extra.bonus..' '..loc.dictionary.chance, colour = G.C.GREEN},
+                    extra = {message = '+X'..card.ability.extra.bonus..' '..G.localization.misc.dictionary.bunc_chance, colour = G.C.GREEN},
                     card = card
                 }
             end
@@ -1627,7 +1760,7 @@ create_joker({ -- Registration Plate
     custom_vars = function(self, info_queue, card)
         local vars
         if card.ability.extra.combination == '' then
-            vars = {'2, 3, 4, 5 '..loc.dictionary.word_and..' 6'}
+            vars = {'2, 3, 4, 5 '..G.localization.misc.dictionary.bunc_word_and..' 6'}
         else
             vars = {card.ability.extra.combination}
         end
@@ -1653,7 +1786,7 @@ create_joker({ -- Registration Plate
             table.insert(card.ability.extra.ranks, card.ability.extra.card_list[i]:get_id())
         end
 
-        card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..loc.dictionary.word_and.." "..table.concat(combination, " ", 5)
+        card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..G.localization.misc.dictionary.bunc_word_and.." "..table.concat(combination, " ", 5)
     end,
     calculate = function(self, card, context)
         if context.end_of_round and #G.deck.cards ~= 0 then
@@ -1676,7 +1809,7 @@ create_joker({ -- Registration Plate
                 table.insert(card.ability.extra.ranks, card.ability.extra.card_list[i]:get_id())
             end
 
-            card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..loc.dictionary.word_and.." "..table.concat(combination, " ", 5)
+            card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..G.localization.misc.dictionary.bunc_word_and.." "..table.concat(combination, " ", 5)
         end
     end
 })
@@ -1860,7 +1993,7 @@ create_joker({ -- Conquest
             end
 
             if card.ability.extra.joker ~= 0 then
-                forced_message(loc.dictionary.debuffed, card, G.C.RED, true, card.ability.extra.joker)
+                forced_message(G.localization.misc.dictionary.bunc_debuffed, card, G.C.RED, true, card.ability.extra.joker)
             end
         end
         if context.joker_main then
@@ -2237,7 +2370,7 @@ create_joker({ -- Trigger Finger
                 if G.hand.highlighted then
                     G.FUNCS.play_cards_from_highlighted()
                     play_sound('bunc_gunshot')
-                    forced_message(loc.dictionary.pew, card, G.C.RED)
+                    forced_message(G.localization.misc.dictionary.bunc_pew, card, G.C.RED)
                 end
             return true end})
         end
@@ -2515,7 +2648,7 @@ create_joker({ -- Disproportionality
         for i = card.ability.extra.min, card.ability.extra.max do
             r_chips[#r_chips + 1] = string.format("%03d", i)
         end
-        local loc_chips = ' '..(loc.dictionary.chips)..' '
+        local loc_chips = ' '..(G.localization.misc.dictionary.bunc_chips)..' '
         local text = {
             [1] = "[1] Lua local 'handler'",
             [2] = "at file 'chip_mod.lua:",
@@ -2698,7 +2831,7 @@ create_joker({ -- Cellphone
             card.ability.extra.cards_to_hand = context.scoring_hand
         end
         if context.press_play and card.ability.extra.active and G.GAME.current_round.hands_played == 0 then
-            forced_message(loc.dictionary.accepted, card, G.C.GREEN)
+            forced_message(G.localization.misc.dictionary.bunc_accepted, card, G.C.GREEN)
         end
         if context.after and G.GAME.current_round.hands_played == 0 then
             event({func = function ()
@@ -2708,7 +2841,7 @@ create_joker({ -- Cellphone
         end
         if context.pre_discard and card.ability.extra.active then
             card.ability.extra.active = false
-            forced_message(loc.dictionary.declined, card, G.C.RED, true)
+            forced_message(G.localization.misc.dictionary.bunc_declined, card, G.C.RED, true)
         end
     end,
     set_ability = function(self, card, initial, delay_sprites)
@@ -2803,7 +2936,7 @@ create_joker({ -- Mousetrap
             if pseudorandom('mousetrap'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                 if G.GAME.current_round.hands_left ~= 0 then ease_hands_played(-1) end
                 event({func = function() play_sound('bunc_mousetrap') return true end})
-                forced_message(loc.dictionary.ouch, card, G.C.RED, true)
+                forced_message(G.localization.misc.dictionary.bunc_ouch, card, G.C.RED, true)
             else
                 return {
                     message = localize{type='variable', key='a_chips', vars={card.ability.extra.chips}},
@@ -3307,7 +3440,7 @@ create_joker({ -- Rigoletto
     name = 'Rigoletto', position = 1,
     vars = {{bonus = 0.2}, {xmult = 1}, {tally = 0}},
     custom_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = {set = 'Other', key = 'exotic_cards'}
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_exotic_cards'}
         return {vars = {card.ability.extra.bonus, card.ability.extra.xmult}}
     end,
     rarity = 'Legendary', cost = 20,
@@ -3349,9 +3482,9 @@ SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py 
 
 SMODS.Consumable{ -- The Sky
     set = 'Tarot', atlas = 'bunco_tarots',
-    key = 'sky', loc_txt = loc.sky,
+    key = 'sky',
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge(loc.dictionary.mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'bunc_Fleurons'},
@@ -3391,9 +3524,9 @@ SMODS.Consumable{ -- The Sky
 
 SMODS.Consumable{ -- The Abyss
     set = 'Tarot', atlas = 'bunco_tarots',
-    key = 'abyss', loc_txt = loc.abyss,
+    key = 'abyss',
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge(loc.dictionary.mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'bunc_Halberds'},
@@ -3437,7 +3570,7 @@ SMODS.Atlas({key = 'bunco_planets', path = 'Consumables/Planets.png', px = 71, p
 
 SMODS.Consumable{ -- Quaoar
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'Quaoar', loc_txt = loc.quaoar,
+    key = 'quaoar',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3449,13 +3582,14 @@ SMODS.Consumable{ -- Quaoar
     process_loc_text = function(self)
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key] = {}
         G.localization.descriptions[self.set][self.key].text = target_text
     end
 }
 
 SMODS.Consumable{ -- Haumea
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'Haumea', loc_txt = loc.haumea,
+    key = 'haumea',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3467,13 +3601,14 @@ SMODS.Consumable{ -- Haumea
     process_loc_text = function(self)
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key] = {}
         G.localization.descriptions[self.set][self.key].text = target_text
     end
 }
 
 SMODS.Consumable{ -- Sedna
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'Sedna', loc_txt = loc.sedna,
+    key = 'sedna',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3485,13 +3620,14 @@ SMODS.Consumable{ -- Sedna
     process_loc_text = function(self)
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key] = {}
         G.localization.descriptions[self.set][self.key].text = target_text
     end
 }
 
 SMODS.Consumable{ -- Makemake
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'Makemake', loc_txt = loc.makemake,
+    key = 'makemake',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3503,6 +3639,7 @@ SMODS.Consumable{ -- Makemake
     process_loc_text = function(self)
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key] = {}
         G.localization.descriptions[self.set][self.key].text = target_text
     end
 }
@@ -3513,7 +3650,7 @@ SMODS.Atlas({key = 'bunco_spectrals', path = 'Consumables/Spectrals.png', px = 7
 
 SMODS.Consumable{ -- Cleanse
     set = 'Spectral', atlas = 'bunco_spectrals',
-    key = 'cleanse', loc_txt = loc.cleanse,
+    key = 'cleanse',
 
     config = {max_highlighted = 3},
     pos = coordinate(1),
@@ -3710,7 +3847,6 @@ SMODS.ConsumableType{
     key = 'Polymino',
     primary_colour = HEX('424e54'),
     secondary_colour = G.C.BUNCO_VIRTUAL_DARK,
-    loc_txt = loc.polymino,
     collection_rows = {4, 4}
 }
 
@@ -3722,7 +3858,7 @@ SMODS.UndiscoveredSprite{
 
 SMODS.Consumable{ -- The I
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_i', loc_txt = loc.the_i,
+    key = 'the_i',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -3783,7 +3919,7 @@ SMODS.Consumable{ -- The I
 
 SMODS.Consumable{ -- The O
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_o', loc_txt = loc.the_o,
+    key = 'the_o',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -3860,7 +3996,7 @@ SMODS.Consumable{ -- The O
 
 SMODS.Consumable{ -- The T
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_t', loc_txt = loc.the_t,
+    key = 'the_t',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -3947,7 +4083,7 @@ SMODS.Consumable{ -- The T
 
 SMODS.Consumable{ -- The S
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_s', loc_txt = loc.the_s,
+    key = 'the_s',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4036,7 +4172,7 @@ SMODS.Consumable{ -- The S
 
 SMODS.Consumable{ -- The Z
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_z', loc_txt = loc.the_z,
+    key = 'the_z',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4122,7 +4258,7 @@ SMODS.Consumable{ -- The Z
 
 SMODS.Consumable{ -- The J
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_j', loc_txt = loc.the_j,
+    key = 'the_j',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4221,7 +4357,7 @@ SMODS.Consumable{ -- The J
 
 SMODS.Consumable{ -- The L
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_l', loc_txt = loc.the_l,
+    key = 'the_l',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4316,7 +4452,7 @@ SMODS.Consumable{ -- The L
 
 SMODS.Consumable{ -- The /
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_slash', loc_txt = loc.the_slash,
+    key = 'the_slash',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4329,7 +4465,7 @@ SMODS.Consumable{ -- The /
     end,
 
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge(loc.dictionary.mysterious_polymino, get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_polymino, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     can_use = function(self, card)
@@ -4410,7 +4546,7 @@ SMODS.Consumable{ -- The /
 
 SMODS.Consumable{ -- The 8
     set = 'Spectral', atlas = 'bunco_polyminoes',
-    key = 'the_8', loc_txt = loc.the_8,
+    key = 'the_8',
 
     hidden = true,
     soul_rate = 0.002,
@@ -4457,8 +4593,6 @@ SMODS.Suit{ -- Fleurons
     lc_colour = HEX('d6901a'),
     hc_colour = HEX('dbb529'),
 
-    loc_txt = loc.fleurons,
-
     in_pool = function(self, args)
         if args and args.initial_deck then
             return false
@@ -4483,8 +4617,6 @@ SMODS.Suit{ -- Halberds
 
     lc_colour = HEX('6e3c63'),
     hc_colour = HEX('993283'),
-
-    loc_txt = loc.halberds,
 
     in_pool = function(self, args)
         if args and args.initial_deck then
@@ -4556,7 +4688,6 @@ SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
         { 'bunc_FLEURON_5', true },
         { 'H_K',    true },
     },
-    loc_txt = loc.spectrum,
     evaluate = function(parts)
         return parts.bunc_spectrum
     end
@@ -4576,10 +4707,9 @@ SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
         { 'D_9', true },
         { 'H_8',    true }
     },
-    loc_txt = loc.straight_spectrum,
     process_loc_text = function(self)
         SMODS.PokerHand.process_loc_text(self)
-        SMODS.process_loc_text(G.localization.misc.poker_hands, self.key..'_2', self.loc_txt, 'extra')
+        SMODS.process_loc_text(G.localization.misc.poker_hands, self.key..' (Royal)', self.loc_txt, 'extra')
     end,
     evaluate = function(parts)
         if not next(parts.bunc_spectrum) or not next(parts._straight) then return {} end
@@ -4592,7 +4722,7 @@ SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
 			royal = royal and (rank.key == 'Ace' or rank.key == '10' or rank.face)
 		end
 		if royal then
-			return self.key..'_2'
+			return self.key..' (Royal)'
 		end
     end
 }
@@ -4612,7 +4742,6 @@ SMODS.PokerHand{ -- Spectrum House (Referenced from SixSuits)
         { 'D_8',    true },
         { 'H_8',    true }
     },
-    loc_txt = loc.spectrum_house,
     evaluate = function(parts)
         if #parts._3 < 1 or #parts._2 < 2 or not next(parts.bunc_spectrum) then return {} end
         return {SMODS.merge_lists (parts._all_pairs, parts.bunc_spectrum)}
@@ -4634,7 +4763,6 @@ SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
         { 'H_7',    true },
         { 'C_7',    true }
     },
-    loc_txt = loc.spectrum_five,
     evaluate = function(parts)
         if not next(parts._5) or not next(parts.bunc_spectrum) then return {} end
         return {SMODS.merge_lists (parts._5, parts.bunc_spectrum)}
@@ -4723,7 +4851,6 @@ SMODS.PokerHand{ -- Deal
     l_chips = 0,
     l_mult = 0,
     example = {},
-    loc_txt = loc.deal,
     evaluate = function(parts)
         return parts.bunc_deal
     end
@@ -4735,7 +4862,7 @@ SMODS.Atlas({key = 'bunco_blinds', path = 'Blinds/Blinds.png', px = 34, py = 34,
 SMODS.Atlas({key = 'bunco_blinds_finisher', path = 'Blinds/BlindsFinisher.png', px = 34, py = 34, frames = 21, atlas_table = 'ANIMATION_ATLAS'})
 
 SMODS.Blind{ -- The Paling
-    key = 'paling', loc_txt = loc.paling,
+    key = 'paling',
     boss = {min = 2},
 
     boss_colour = HEX('45d368'),
@@ -4745,7 +4872,7 @@ SMODS.Blind{ -- The Paling
 }
 
 SMODS.Blind{ -- The Umbrella
-    key = 'umbrella', loc_txt = loc.umbrella,
+    key = 'umbrella',
     boss = {min = 2},
 
     disable = function(self)
@@ -4766,16 +4893,15 @@ SMODS.Blind{ -- The Umbrella
 }
 
 SMODS.Blind{ -- The Tine
-    key = 'tine', loc_txt = loc.tine,
+    key = 'tine',
     boss = {min = 2},
 
     vars = {},
     loc_vars = function(self)
         return {vars = {localize(G.GAME.current_round.most_played_rank, 'ranks')}}
     end,
-    process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
-        self.vars = {loc.dictionary.most_played_rank}
+    collection_loc_vars = function(self)
+        return {vars = {localize('bunc_most_played_rank')}}
     end,
 
     debuff_card = function(self, card, from_blind)
@@ -4795,7 +4921,7 @@ SMODS.Blind{ -- The Tine
 }
 
 SMODS.Blind{ -- The Swing
-    key = 'swing', loc_txt = loc.swing,
+    key = 'swing',
     boss = {min = 3},
 
     defeat = function(self)
@@ -4828,7 +4954,7 @@ SMODS.Blind{ -- The Swing
 }
 
 SMODS.Blind{ -- The Miser
-    key = 'miser', loc_txt = loc.miser,
+    key = 'miser',
     boss = {min = 2},
 
     defeat = function(self)
@@ -4852,7 +4978,7 @@ SMODS.Blind{ -- The Miser
 }
 
 SMODS.Blind{ -- The Gate
-    key = 'gate', loc_txt = loc.gate,
+    key = 'gate',
     boss = {min = 1},
 
     boss_colour = HEX('c9a27a'),
@@ -4862,7 +4988,7 @@ SMODS.Blind{ -- The Gate
 }
 
 SMODS.Blind{ -- The Flame
-    key = 'flame', loc_txt = loc.flame,
+    key = 'flame',
     boss = {min = 3},
 
     debuff_card = function(self, card, from_blind)
@@ -4882,16 +5008,15 @@ SMODS.Blind{ -- The Flame
 }
 
 SMODS.Blind{ -- The Mask
-    key = 'mask', loc_txt = loc.mask,
+    key = 'mask',
     boss = {min = 2},
 
     vars = {},
     loc_vars = function(self)
         return {vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands'), localize(G.GAME.current_round.least_played_poker_hand, 'poker_hands')}}
     end,
-    process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
-        self.vars = {localize('ph_most_played'), loc.dictionary.least_played_hand}
+    collection_loc_vars = function(self)
+        return {vars = {localize('ph_most_played'), localize('bunc_least_played_hand')}}
     end,
 
     modify_hand = function(self, cards, poker_hands, text, mult, hand_chips)
@@ -4911,16 +5036,15 @@ SMODS.Blind{ -- The Mask
 }
 
 SMODS.Blind{ -- The Bulwark
-    key = 'bulwark', loc_txt = loc.bulwark,
+    key = 'bulwark',
     boss = {min = 2},
 
     vars = {},
     loc_vars = function(self)
         return {vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands')}}
     end,
-    process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
-        self.vars = {localize('ph_most_played')}
+    collection_loc_vars = function(self)
+        return {vars = {localize('ph_most_played')}}
     end,
 
     press_play = function(self)
@@ -4954,7 +5078,7 @@ SMODS.Blind{ -- The Bulwark
 }
 
 SMODS.Blind{ -- The Knoll
-    key = 'knoll', loc_txt = loc.knoll,
+    key = 'knoll',
     boss = {min = 4},
 
     stay_flipped = function(self, area, card)
@@ -4973,7 +5097,7 @@ SMODS.Blind{ -- The Knoll
 }
 
 SMODS.Blind{ -- The Stone
-    key = 'stone', loc_txt = loc.stone,
+    key = 'stone',
     boss = {min = 4},
 
     set_blind = function(self, reset, silent)
@@ -5019,7 +5143,7 @@ SMODS.Blind{ -- The Stone
 }
 
 SMODS.Blind{ -- The Sand
-    key = 'sand', loc_txt = loc.sand,
+    key = 'sand',
     boss = {min = 4},
 
     set_blind = function(self, reset, silent)
@@ -5073,7 +5197,7 @@ SMODS.Blind{ -- The Sand
 }
 
 SMODS.Blind{ -- The Blade
-    key = 'blade', loc_txt = loc.blade,
+    key = 'blade',
     boss = {min = 4},
 
     vars = {},
@@ -5082,9 +5206,8 @@ SMODS.Blind{ -- The Blade
         overscore = number_format(overscore * 1.5)
         return {vars = {overscore}}
     end,
-    process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
-        self.vars = {loc.dictionary.blade}
+    collection_loc_vars = function(self)
+        return {vars = {localize('bunc_blade')}}
     end,
 
     boss_colour = HEX('d92034'),
@@ -5094,7 +5217,7 @@ SMODS.Blind{ -- The Blade
 }
 
 SMODS.Blind{ -- The Claw
-    key = 'claw', loc_txt = loc.claw,
+    key = 'claw',
     boss = {min = 1},
 
     boss_colour = HEX('d45741'),
@@ -5104,7 +5227,7 @@ SMODS.Blind{ -- The Claw
 }
 
 SMODS.Blind{ -- The Veil
-    key = 'veil', loc_txt = loc.veil,
+    key = 'veil',
     boss = {min = 1},
 
     boss_colour = HEX('ffdf7d'),
@@ -5114,7 +5237,7 @@ SMODS.Blind{ -- The Veil
 }
 
 SMODS.Blind{ -- The Cadaver
-    key = 'cadaver', loc_txt = loc.cadaver,
+    key = 'cadaver',
     boss = {min = 2},
 
     debuff_hand = function(self, cards, hand, handname, check)
@@ -5135,7 +5258,7 @@ SMODS.Blind{ -- The Cadaver
 }
 
 SMODS.Blind{ -- The Wind
-    key = 'wind', loc_txt = loc.wind,
+    key = 'wind',
     boss = {min = 6},
 
     drawn_to_hand = function(self)
@@ -5153,7 +5276,7 @@ SMODS.Blind{ -- The Wind
 }
 
 SMODS.Blind{ -- The Prince
-    key = 'prince', loc_txt = loc.prince,
+    key = 'prince',
     boss = {min = 6},
 
     drawn_to_hand = function(self)
@@ -5179,7 +5302,7 @@ SMODS.Blind{ -- The Prince
 }
 
 SMODS.Blind{ -- The Depths
-    key = 'depths', loc_txt = loc.depths,
+    key = 'depths',
     boss = {min = 4},
 
     press_play = function(self)
@@ -5209,7 +5332,7 @@ SMODS.Blind{ -- The Depths
 }
 
 SMODS.Blind{ -- The Chasm
-    key = 'chasm', loc_txt = loc.chasm,
+    key = 'chasm',
     boss = {min = 4},
 
     press_play = function(self)
@@ -5241,7 +5364,7 @@ SMODS.Blind{ -- The Chasm
 -- Finishers
 
 SMODS.Blind{ -- Chartreuse Crown
-    key = 'final_crown', loc_txt = loc.chartreuse_crown,
+    key = 'final_crown',
     boss = {showdown = true, min = 10, max = 10},
 
     debuff_card = function(self, card, from_blind)
@@ -5286,7 +5409,7 @@ SMODS.Blind{ -- Chartreuse Crown
 }
 
 SMODS.Blind{ -- Vermilion Trident
-    key = 'final_trident', loc_txt = loc.vermilion_trident,
+    key = 'final_trident',
     boss = {showdown = true, min = 10, max = 10},
 
     defeat = function(self)
@@ -5300,7 +5423,7 @@ SMODS.Blind{ -- Vermilion Trident
 }
 
 SMODS.Blind{ -- Indigo Tower
-    key = 'final_tower', loc_txt = loc.indigo_tower,
+    key = 'final_tower',
     boss = {showdown = true, min = 10, max = 10},
 
     debuff_card = function(self, card, from_blind)
@@ -5320,7 +5443,7 @@ SMODS.Blind{ -- Indigo Tower
 }
 
 SMODS.Blind{ -- Magenta Dagger
-    key = 'final_dagger', loc_txt = loc.magenta_dagger,
+    key = 'final_dagger',
     boss = {showdown = true, min = 10, max = 10},
 
     boss_colour = HEX('cb589f'),
@@ -5330,7 +5453,7 @@ SMODS.Blind{ -- Magenta Dagger
 }
 
 SMODS.Blind{ -- Turquoise Shield
-    key = 'final_shield', loc_txt = loc.turquoise_shield,
+    key = 'final_shield',
     boss = {showdown = true, min = 10, max = 10},
 
     set_blind = function(self, reset, silent)
@@ -5384,11 +5507,11 @@ SMODS.Blind{ -- Turquoise Shield
 SMODS.Atlas({key = 'bunco_decks', path = 'Decks/Decks.png', px = 71, py = 95})
 
 SMODS.Back{ -- Fairy
-	key = 'fairy', loc_txt = loc.fairy,
+	key = 'fairy',
 
     config = {amount = 4},
     loc_vars = function(self)
-        return {vars = {self.config.amount, localize{type = 'name_text', set = 'Other', key = 'exotic_cards'}}}
+        return {vars = {self.config.amount, localize{type = 'name_text', set = 'Other', key = 'bunc_exotic_cards'}}}
     end,
 
     unlocked = false,
@@ -5429,7 +5552,7 @@ SMODS.Back{ -- Fairy
 
 --[[
 SMODS.Back{ -- Digital
-	key = 'digital', loc_txt = loc.digital,
+	key = 'digital',
 
     config = {polymino_rate = 2, consumables = {'c_bunc_the_i'}},
     loc_vars = function(self)
@@ -5457,7 +5580,7 @@ SMODS.Atlas({key = 'bunco_tags_exotic', path = 'Tags/TagsExotic.png', px = 34, p
 SMODS.Atlas({key = 'bunco_tags_sticker', path = 'Tags/TagsSticker.png', px = 34, py = 34})
 
 SMODS.Tag{ -- Breaking
-    key = 'breaking', loc_txt = loc.breaking,
+    key = 'breaking',
 
     config = {type = 'round_start_bonus'},
 
@@ -5489,7 +5612,7 @@ SMODS.Tag{ -- Breaking
 }
 
 SMODS.Tag{ -- Arcade
-    key = 'arcade', loc_txt = loc.arcade,
+    key = 'arcade',
     loc_vars = function(self, info_queue)
         info_queue[#info_queue + 1] = {key = 'p_bunc_virtual_mega', set = 'Other', vars = {G.P_CENTERS.p_bunc_virtual_mega.config.choose, G.P_CENTERS.p_bunc_virtual_mega.config.extra}}
         return {}
@@ -5529,7 +5652,7 @@ SMODS.Tag{ -- Arcade
 }
 
 SMODS.Tag{ -- Triple
-    key = 'triple', loc_txt = loc.triple,
+    key = 'triple',
 
     config = {type = 'tag_add'},
 
@@ -5559,7 +5682,7 @@ SMODS.Tag{ -- Triple
 
 
 SMODS.Tag{ -- Glitter
-    key = 'glitter', loc_txt = loc.glitter_tag,
+    key = 'glitter',
 
     config = {type = 'store_joker_modify', edition = 'bunc_glitter', odds = 4},
     loc_vars = function(self, info_queue)
@@ -5598,7 +5721,7 @@ SMODS.Tag{ -- Glitter
 
 
 SMODS.Tag{ -- Fluorescent
-    key = 'fluorescent', loc_txt = loc.fluorescent_tag,
+    key = 'fluorescent',
 
     config = {type = 'store_joker_modify', edition = 'bunc_fluorescent', odds = 4},
     loc_vars = function(self, info_queue)
@@ -5644,7 +5767,7 @@ SMODS.Tag{ -- Fluorescent
 
 
 SMODS.Tag{ -- Chips
-    key = 'chips', loc_txt = loc.chips,
+    key = 'chips',
 
     config = {type = 'hand_played'},
     loc_vars = function(self, info_queue)
@@ -5673,7 +5796,7 @@ SMODS.Tag{ -- Chips
 }
 
 SMODS.Tag{ -- Mult
-    key = 'mult', loc_txt = loc.mult,
+    key = 'mult',
 
     config = {type = 'hand_played'},
     loc_vars = function(self, info_queue)
@@ -5702,7 +5825,7 @@ SMODS.Tag{ -- Mult
 }
 
 SMODS.Tag{ -- Xmult
-    key = 'xmult', loc_txt = loc.xmult,
+    key = 'xmult',
 
     config = {type = 'hand_played'},
     loc_vars = function(self, info_queue)
@@ -5732,7 +5855,7 @@ SMODS.Tag{ -- Xmult
 
 
 SMODS.Tag{ -- Xchip
-    key = 'xchips', loc_txt = loc.xchips,
+    key = 'xchips',
 
     config = {type = 'hand_played', odds = -1},
     loc_vars = function(self, info_queue)
@@ -5762,11 +5885,11 @@ SMODS.Tag{ -- Xchip
 
 
 SMODS.Tag{ -- Filigree
-    key = 'filigree', loc_txt = loc.filigree,
+    key = 'filigree',
 
     config = {type = 'standard_pack_opened'},
     loc_vars = function(self, info_queue)
-        info_queue[#info_queue+1] = {set = 'Other', key = 'exotic_cards'}
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_exotic_cards'}
         return {}
     end,
     apply = function(self, tag, context)
@@ -5808,7 +5931,7 @@ SMODS.Tag{ -- Filigree
 }
 
 SMODS.Tag{ -- Eternal
-    key = 'eternal', loc_txt = loc.eternal,
+    key = 'eternal',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5842,7 +5965,7 @@ SMODS.Tag{ -- Eternal
 }
 
 SMODS.Tag{ -- Perishable
-    key = 'perishable', loc_txt = loc.perishable,
+    key = 'perishable',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5876,7 +5999,7 @@ SMODS.Tag{ -- Perishable
 }
 
 SMODS.Tag{ -- Scattering
-    key = 'scattering', loc_txt = loc.scattering_tag,
+    key = 'scattering',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5915,7 +6038,7 @@ SMODS.Tag{ -- Scattering
 }
 
 SMODS.Tag{ -- Hindered
-    key = 'hindered', loc_txt = loc.hindered_tag,
+    key = 'hindered',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5954,7 +6077,7 @@ SMODS.Tag{ -- Hindered
 }
 
 SMODS.Tag{ -- Reactive
-    key = 'reactive', loc_txt = loc.reactive_tag,
+    key = 'reactive',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5992,7 +6115,7 @@ SMODS.Tag{ -- Reactive
 }
 
 SMODS.Tag{ -- Rental
-    key = 'rental', loc_txt = loc.rental,
+    key = 'rental',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -6032,7 +6155,7 @@ SMODS.Shader({key = 'glitter', path = 'glitter.fs'})
 SMODS.Sound({key = 'glitter', path = 'glitter.ogg'})
 
 SMODS.Edition{
-    key = 'glitter', loc_txt = loc.glitter_edition,
+    key = 'glitter',
 
     config = {Xchips = 1.3},
     loc_vars = function(self, info_queue)
@@ -6054,7 +6177,7 @@ SMODS.Shader({key = 'fluorescent', path = 'fluorescent.fs'})
 SMODS.Sound({key = 'fluorescent', path = 'fluorescent.ogg'})
 
 SMODS.Edition{
-    key = 'fluorescent', loc_txt = loc.fluorescent_edition,
+    key = 'fluorescent',
 
     sound = {sound = 'bunc_fluorescent', per = 1.2, vol = 0.4},
     in_shop = true,
@@ -6071,7 +6194,7 @@ SMODS.Edition{
 SMODS.Atlas({key = 'bunco_vouchers', path = 'Vouchers/Vouchers.png', px = 71, py = 95})
 
 SMODS.Voucher{ -- Lamination
-    key = 'lamination', loc_txt = loc.lamination,
+    key = 'lamination',
 
     unlocked = true,
 
@@ -6080,7 +6203,7 @@ SMODS.Voucher{ -- Lamination
 }
 
 SMODS.Voucher{ -- Supercoating
-    key = 'supercoating', loc_txt = loc.supercoating,
+    key = 'supercoating',
 
     requires = {'v_bunc_lamination'},
 
@@ -6097,7 +6220,7 @@ SMODS.Voucher{ -- Supercoating
 }
 
 SMODS.Voucher{ -- Hedge Trimmer
-    key = 'hedge_trimmer', loc_txt = loc.hedge_trimmer,
+    key = 'hedge_trimmer',
 
     config = {percent = 5},
     loc_vars = function(self, info_queue)
@@ -6111,7 +6234,7 @@ SMODS.Voucher{ -- Hedge Trimmer
 }
 
 SMODS.Voucher{ -- Chainsaw
-    key = 'chainsaw', loc_txt = loc.chainsaw,
+    key = 'chainsaw',
 
     config = {percent = 20},
     loc_vars = function(self, info_queue)
@@ -6137,7 +6260,7 @@ SMODS.Voucher{ -- Chainsaw
 }
 
 SMODS.Voucher{ -- Cups 'n' Balls
-    key = 'cups_n_balls', loc_txt = loc.cups_n_balls,
+    key = 'cups_n_balls',
 
     redeem = function(self)
         change_booster_amount(1)
@@ -6150,7 +6273,7 @@ SMODS.Voucher{ -- Cups 'n' Balls
 }
 
 SMODS.Voucher{ -- Shell Game
-    key = 'shell_game', loc_txt = loc.shell_game,
+    key = 'shell_game',
 
     requires = {'v_bunc_cups_n_balls'},
 
@@ -6168,7 +6291,7 @@ SMODS.Voucher{ -- Shell Game
 
 --[[
 SMODS.Voucher{ -- Disguise
-    key = 'disguise', loc_txt = loc.disguise,
+    key = 'disguise',
 
     unlocked = true,
 
@@ -6177,7 +6300,7 @@ SMODS.Voucher{ -- Disguise
 }
 
 SMODS.Voucher{ -- Masquerade
-    key = 'masquerade', loc_txt = loc.masquerade,
+    key = 'masquerade',
 
     requires = {'v_bunc_disguise'},
 
@@ -6206,7 +6329,7 @@ SMODS.Voucher{ -- Masquerade
 
 --[[
 SMODS.Voucher{ -- Fanny Pack
-    key = 'fanny_pack', loc_txt = loc.fanny_pack,
+    key = 'fanny_pack',
 
     config = {extra = {odds = 4}},
     loc_vars = function(self, info_queue, card)
@@ -6229,7 +6352,7 @@ SMODS.Voucher{ -- Fanny Pack
 }
 
 SMODS.Voucher{ -- Pin Collector
-    key = 'pin_collector', loc_txt = loc.pin_collector,
+    key = 'pin_collector',
 
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_bunc_triple'}
@@ -6253,7 +6376,7 @@ SMODS.Voucher{ -- Pin Collector
 
 --[[
 SMODS.Voucher{ -- Arcade Machine
-    key = 'arcade_machine', loc_txt = loc.arcade_machine,
+    key = 'arcade_machine',
 
     unlocked = true,
 
@@ -6262,7 +6385,7 @@ SMODS.Voucher{ -- Arcade Machine
 }
 
 SMODS.Voucher{ -- Polybius
-    key = 'polybius', loc_txt = loc.polybius,
+    key = 'polybius',
 
     requires = {'v_bunc_arcade_machine'},
 
@@ -6352,10 +6475,10 @@ for i = 1, 4 do -- Blind
     SMODS.Booster{
         type = 'bunc_blind',
 
-        key = 'blind_'..i, loc_txt = loc.blind,
+        key = 'blind_'..i,
 
         loc_vars = function(self, info_queue, card)
-            return {vars = {self.config.extra}}
+            return {key = 'p_bunc_blind', vars = {self.config.extra}}
         end,
         config = {extra = 3, choose = 1},
 
@@ -6424,7 +6547,11 @@ for i = 1, 4 do -- Virtual
     SMODS.Booster{
         type = 'bunc_virtual',
 
-        key = 'virtual_'..(i <= 2 and i or i == 3 and 'jumbo' or 'mega'), loc_txt = loc.virtual,
+        key = 'virtual_'..(i <= 2 and i or i == 3 and 'jumbo' or 'mega'),
+
+        loc_vars = function(self, info_queue, card)
+            return {key = (self.key == 'p_bunc_virtual_1' or self.key == 'p_bunc_virtual_2') and 'p_bunc_virtual_normal' or self.key, vars = {self.config.choose, self.config.extra}}
+        end,
 
         config = {extra = i <= 2 and 2 or 4, choose = i <= 3 and 1 or 2},
 
@@ -6508,7 +6635,7 @@ end
 SMODS.Atlas({key = 'bunco_stickers', path = 'Stickers/Stickers.png', px = 71, py = 95})
 
 SMODS.Sticker{ -- Scattering
-    key = 'scattering', loc_txt = loc.scattering,
+    key = 'scattering',
 
     apply = function(self, card, val)
         if card.ability.eternal or card.ability.bunc_hindered or card.ability.bunc_reactive then return end
@@ -6524,7 +6651,7 @@ SMODS.Sticker{ -- Scattering
 }
 
 SMODS.Sticker{ -- Hindered
-    key = 'hindered', loc_txt = loc.hindered,
+    key = 'hindered',
 
     apply = function(self, card, val)
         if card.ability.eternal or card.ability.bunc_scattering or card.ability.bunc_reactive then return end
@@ -6541,7 +6668,7 @@ SMODS.Sticker{ -- Hindered
 }
 
 SMODS.Sticker{ -- Reactive
-    key = 'reactive', loc_txt = loc.reactive,
+    key = 'reactive',
 
     apply = function(self, card, val)
         if card.ability.eternal or card.ability.bunc_scattering or card.ability.bunc_hindered then return end
@@ -6563,7 +6690,7 @@ SMODS.Atlas({key = 'bunco_stakes', path = 'Stakes/Stakes.png', px = 29, py = 29}
 SMODS.Atlas({key = 'bunco_stake_stickers', path = 'Stickers/StickersStake.png', px = 71, py = 95})
 
 SMODS.Stake{ -- Cyan
-    key = 'cyan', loc_txt = loc.cyan,
+    key = 'cyan',
 
     unlocked_stake = 'bunc_pink',
     applied_stakes = {'orange'},
@@ -6583,7 +6710,7 @@ SMODS.Stake{ -- Cyan
 }
 
 SMODS.Stake{ -- Pink
-    key = 'pink', loc_txt = loc.pink,
+    key = 'pink',
 
     unlocked_stake = 'bunc_magenta',
     applied_stakes = {'bunc_cyan'},
@@ -6602,7 +6729,7 @@ SMODS.Stake{ -- Pink
 }
 
 SMODS.Stake{ -- Magenta
-    key = 'magenta', loc_txt = loc.magenta,
+    key = 'magenta',
 
     unlocked_stake = 'gold',
     applied_stakes = {'bunc_pink'},
