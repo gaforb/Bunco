@@ -6,7 +6,6 @@
 --- VERSION: 5.0
 
 -- ToDo:
--- (1/2) Make editioned consumables and replace their info_queue (to check: common events.lua)
 -- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
 -- Make so unlocks actually count things
 -- Make configs apply immediately
@@ -85,6 +84,10 @@ end
 
 function BUNCOMOD.content.process_loc_text()
     G.P_CENTERS['bunc_exotic_cards'] = {key = 'bunc_exotic_cards', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_foil'] = {key = 'bunc_consumable_edition_foil', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_holo'] = {key = 'bunc_consumable_edition_holo', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_polychrome'] = {key = 'bunc_consumable_edition_polychrome', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_bunc_glitter'] = {key = 'bunc_consumable_edition_bunc_glitter', set = 'Other'}
 end
 
 -- Config globals
@@ -269,10 +272,6 @@ if config.high_quality_shaders then
     G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
     G.SHADERS['flame'] = love.graphics.newShader(flame_shader)
 end
-
--- Double lovers
-
-if config.double_lovers then G.P_CENTERS.c_lovers.config.max_highlighted = 2 end
 
 -- Fixed badges
 
@@ -466,6 +465,8 @@ if config.gameplay_reworks then
 
     BUNCOMOD.content.config.gameplay_reworks = true
 
+    G.P_CENTERS.c_lovers.config.max_highlighted = 2
+
     SMODS.Joker:take_ownership('luchador', {
         loc_vars = function(self, info_queue)
             info_queue[#info_queue + 1] = {key = 'tag_bunc_breaking', set = 'Tag'}
@@ -651,7 +652,7 @@ function Game:start_run(args)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
     end
     if #sledgehammers >= 1 then
-        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / SMODS.Jokers['j_bunc_sledgehammer'].config.extra.div_chance_denom
+        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / G.P_CENTERS['j_bunc_sledgehammer'].config.extra.div_chance_denom
     end
 end
 
@@ -676,6 +677,13 @@ SMODS.Atlas({key = 'bunco_jokers', path = 'Jokers/Jokers.png', px = 71, py = 95}
 SMODS.Atlas({key = 'bunco_jokers_exotic', path = 'Jokers/JokersExotic.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_legendary', path = 'Jokers/JokersLegendary.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_the_joker', path = 'Jokers/JokerBlind.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_jokers_taped', path = 'Jokers/JokerTaped.png', px = 127, py = 113})
+SMODS.Atlas({key = 'bunco_jokers_headache', path = 'Jokers/JokerHeadache.png', px = 71, py = 95})
+
+SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
+SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
+
+SMODS.Shader({key = 'headache', path = 'headache.fs'})
 
 local function create_joker(joker)
 
@@ -794,9 +802,6 @@ local function create_joker(joker)
         }
     end
 end
-
-SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
-SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
 
 -- Jokers
 
@@ -1571,14 +1576,36 @@ create_joker({ -- Sledgehammer
     end,
     add = function(self, card)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
-        if #SMODS.find_card('j_bunc_sledgehammer') == 1 then
+        for _, deck_card in pairs(G.playing_cards) do
+            if deck_card.config.center == G.P_CENTERS.m_glass then
+                deck_card.ability.Xmult = deck_card.ability.Xmult + card.ability.extra.plus_xmult
+            end
+        end
+        if #SMODS.find_card('j_bunc_sledgehammer') == 0 then
             G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / self.config.extra.div_chance_denom
+
+            for _, deck_card in pairs(G.playing_cards) do
+                if deck_card.config.center == G.P_CENTERS.m_glass then
+                    deck_card.ability.extra = deck_card.ability.extra / self.config.extra.div_chance_denom
+                end
+            end
         end
     end,
     remove = function(self, card)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult - card.ability.extra.plus_xmult
+        for _, deck_card in pairs(G.playing_cards) do
+            if deck_card.config.center == G.P_CENTERS.m_glass then
+                deck_card.ability.Xmult = deck_card.ability.Xmult - card.ability.extra.plus_xmult
+            end
+        end
         if #SMODS.find_card('j_bunc_sledgehammer') == 0 then
             G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra * self.config.extra.div_chance_denom
+
+            for _, deck_card in pairs(G.playing_cards) do
+                if deck_card.config.center == G.P_CENTERS.m_glass then
+                    deck_card.ability.extra = deck_card.ability.extra * self.config.extra.div_chance_denom
+                end
+            end
         end
     end
 })
@@ -2194,7 +2221,7 @@ create_joker({ -- Metallurgist
     add = function(self, card)
         for _, deck_card in pairs(G.playing_cards) do
             if deck_card.config.center == G.P_CENTERS.m_gold then
-                deck_card.ability.h_mult = (deck_card.ability.h_mult or 0) + card.ability.extra.mult
+                deck_card.ability.h_mult = (deck_card.ability.h_mult and (deck_card.ability.h_mult + card.ability.extra.mult) or 0)
             end
         end
         G.P_CENTERS.m_gold.config.h_mult = (G.P_CENTERS.m_gold.config.h_mult or 0) + card.ability.extra.mult
@@ -2205,7 +2232,7 @@ create_joker({ -- Metallurgist
                 deck_card.ability.h_mult = deck_card.ability.h_mult - card.ability.extra.mult
             end
         end
-        G.P_CENTERS.m_gold.config.h_mult = G.P_CENTERS.m_gold.config.h_mult - card.ability.extra.mult
+        G.P_CENTERS.m_gold.config.h_mult = (G.P_CENTERS.m_gold.config.h_mult and (G.P_CENTERS.m_gold.config.h_mult - card.ability.extra.mult) or 0)
     end
 })
 
@@ -3111,13 +3138,13 @@ create_joker({ -- Domino
 
             local card_pos = context.pre_card_pos
             if card_pos then
-                if context.pre_card_left then
+                if context.pre_card_left and context.pre_card_left.area ~= G.consumeables then
                     if G.FUNCS.check_for_buy_space(context.pre_card_left) then
                         acquire(context.pre_card_left)
                     end
                     big_juice(card)
                 end
-                if context.pre_card_right then
+                if context.pre_card_right and context.pre_card_right.area ~= G.consumeables then
                     if G.FUNCS.check_for_buy_space(context.pre_card_right) then
                         acquire(context.pre_card_right)
                     end
@@ -3151,6 +3178,175 @@ create_joker({ -- Domino
     end
 })
 --]]
+
+create_joker({ -- Glue Gun
+    name = 'Glue Gun', position = 56,
+    vars = {{amount = 4}},
+    rarity = 'Uncommon', cost = 4,
+    blueprint = false, eternal = false,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.selling_self and not context.blueprint then
+            event({func = function()
+                if G.hand and G.hand.highlighted and #G.hand.highlighted == card.ability.extra.amount then
+
+                    for i = 1, #G.hand.highlighted do
+                        if G.hand.highlighted[i].ability.group then return true end
+                    end
+
+                    link_cards(G.hand.highlighted, self.key)
+                    for i = 1, #G.hand.highlighted do
+                        big_juice(G.hand.highlighted[i])
+                    end
+                end
+            return true end})
+        end
+    end
+})
+
+create_joker({ -- Taped
+    name = 'Taped', custom_atlas = 'bunco_jokers_taped', position = 1,
+    rarity = 'Rare', cost = 6,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before
+        and context.full_hand
+        and not context.other_card
+        and G.GAME.current_round.hands_played == 0
+        and G.GAME.blind.boss
+        and not context.blueprint then
+            event({func = function()
+
+                local cards = {}
+
+                for i = 1, #context.full_hand do
+                    if not context.full_hand[i].ability.group then
+                        table.insert(cards, context.full_hand[i])
+                    end
+                end
+
+                if #cards > 1 then
+                    link_cards(cards, self.key)
+                    big_juice(card)
+
+                    for i = 1, #cards do
+                        big_juice(cards[i])
+                    end
+                end
+
+            return true end})
+        end
+    end,
+    set_ability = function(self, card, initial, delay_sprites)
+        if self.discovered or card.bypass_discovery_center then
+            card.T.w = G.CARD_W * 1.788732394366197
+            card.T.h = G.CARD_H * 1.189473684210526
+        end
+    end,
+    set_sprites = function(self, card, front)
+        if self.discovered or card.bypass_discovery_center then
+            card.children.center.scale = {x = 127, y = 113}
+            card.children.center:reset()
+        end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
+    end
+})
+
+create_joker({ -- Rubber Band Ball
+    name = 'Rubber Band Ball', position = 57,
+    vars = {{bonus = 1}, {xmult = 1}},
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if card.ability.extra.xmult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { card.ability.extra.xmult }
+                    },
+                    Xmult_mod = card.ability.extra.xmult,
+                    card = card
+                }
+            end
+        end
+    end,
+    update = function(self, card)
+        card.ability.extra.xmult = (G.GAME.last_card_group and G.GAME.last_card_group + 1 or 1) * card.ability.extra.bonus
+    end,
+    custom_in_pool = function()
+        return G.GAME.last_card_group
+    end,
+})
+
+create_joker({ -- Headache
+    name = 'Headache', custom_atlas = 'bunco_jokers_headache', position = 1,
+    vars = {{amount = 4}, {destroyed = 0}},
+    rarity = 'Uncommon', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.remove_playing_cards then
+            card.ability.extra.destroyed = card.ability.extra.destroyed + #context.removed
+            while card.ability.extra.destroyed >= card.ability.extra.amount do
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    event({trigger = 'before',
+                        delay = 0.0,
+                        func = function()
+                            local polymino = create_card('Polymino', G.consumeables)
+                            polymino:add_to_deck()
+                            G.consumeables:emplace(polymino)
+                            G.GAME.consumeable_buffer = 0
+                    return true end})
+                    forced_message('+1 '..localize('k_polymino'), card, G.C.BUNCO_VIRTUAL)
+                    card.ability.extra.destroyed = card.ability.extra.destroyed - card.ability.extra.amount
+                else
+                    forced_message(localize('k_no_space_ex'), card, G.C.RED)
+                    card.ability.extra.destroyed = card.ability.extra.destroyed - card.ability.extra.amount
+                end
+            end
+        end
+    end
+})
+
+create_joker({ -- Jumper
+    name = 'Jumper', position = 58,
+    vars = {{bonus = 10}, {chips = 0}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before then
+            if context.poker_hands and next(context.poker_hands['Flush']) and not context.blueprint then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.bonus
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.CHIPS,
+                    card = card
+                }
+            end
+        end
+        if context.joker_main then
+            if card.ability.extra.chips ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_chips',
+                        vars = { card.ability.extra.chips }
+                    },
+                    chip_mod = card.ability.extra.chips,
+                    card = card
+                }
+            end
+        end
+    end
+})
 
 -- Exotic Jokers
 
@@ -4904,7 +5100,7 @@ SMODS.Blind{ -- The Tine
         return {vars = {localize('bunc_most_played_rank')}}
     end,
 
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if card.base.value == G.GAME.current_round.most_played_rank then
                 card:set_debuff(true)
@@ -4991,7 +5187,7 @@ SMODS.Blind{ -- The Flame
     key = 'flame',
     boss = {min = 3},
 
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if card.config.center ~= G.P_CENTERS.c_base then
                 card:set_debuff(true)
@@ -5367,7 +5563,7 @@ SMODS.Blind{ -- Chartreuse Crown
     key = 'final_crown',
     boss = {showdown = true, min = 10, max = 10},
 
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if card.base.suit == ('Spades') or
             card.base.suit == ('Hearts') or
@@ -5426,7 +5622,7 @@ SMODS.Blind{ -- Indigo Tower
     key = 'final_tower',
     boss = {showdown = true, min = 10, max = 10},
 
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if not card.ability.played_this_ante then
                 card:set_debuff(true)
@@ -6162,6 +6358,20 @@ SMODS.Edition{
         return {vars = {self.config.Xchips}}
     end,
 
+    calculate = function(self, card, context)
+        if context.post_joker or (context.main_scoring and context.cardarea == G.play) then
+            return {func = function()
+                local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
+                hand_chips = mod_chips(hand_chips * xchips)
+                update_hand_text({delay = 0}, {chips = hand_chips})
+                card_eval_status_text(card, 'extra', nil, percent, nil,
+                {message = 'X'..xchips..' '..G.localization.misc.dictionary.bunc_chips,
+                edition = true,
+                x_chips = true})
+            end}
+        end
+    end,
+
     sound = {sound = 'bunc_glitter', per = 1.2, vol = 0.4},
     in_shop = true,
     weight = 9,
@@ -6522,7 +6732,7 @@ for i = 1, 4 do -- Blind
                         UIBox_dyn_container({
                             {n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
                                 {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
-                                    {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_booster_group_'..self.key)), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
+                                    {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_bunc_blind_pack')), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
                                 {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
                                     {n=G.UIT.O, config={object = DynaText({string = {localize('b_reroll_boss')}, colours = {G.C.WHITE}, shadow = true, rotate = true, bump = true, spacing = 2, scale = 0.5, pop_in = 0.7})}},}},}}
                         }),}},
@@ -6594,7 +6804,7 @@ for i = 1, 4 do -- Virtual
             UIBox_dyn_container({
                 {n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
                     {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
-                        {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_booster_group_'..self.key)), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
+                        {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_bunc_virtual_pack')), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
                     {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
                         {n=G.UIT.O, config={object = DynaText({string = {localize('k_choose')..' '}, colours = {G.C.WHITE}, shadow = true, rotate = true, bump = true, spacing = 2, scale = 0.5, pop_in = 0.7})}},
                         {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'pack_choices'}}, colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.5, pop_in = 0.7})}}}},}}

@@ -55,8 +55,12 @@ return {
             -- Consumable types
 
             k_polymino = 'Polymino',
-            b_polymino_cards = 'Polymino Cards'
+            b_polymino_cards = 'Polymino Cards',
 
+            -- Booster types
+
+            k_bunc_blind_pack = 'Blind Pack',
+            k_bunc_virtual_pack = 'Virtual Pack'
         },
 
         -- Suits
@@ -127,6 +131,30 @@ return {
                     [2] = '{C:bunc_fleurons}Fleuron{} or {C:bunc_halberds}Halberd{} suit'
                 }
             },
+            bunc_consumable_edition_foil = {
+                ['name'] = 'Foil',
+                ['text'] = {
+                    [1] = 'Create a {C:attention}Chips Tag'
+                }
+            },
+            bunc_consumable_edition_holo = {
+                ['name'] = 'Holographic',
+                ['text'] = {
+                    [1] = 'Create a {C:attention}Mult Tag'
+                }
+            },
+            bunc_consumable_edition_polychrome = {
+                ['name'] = 'Polychrome',
+                ['text'] = {
+                    [1] = 'Create a {C:attention}Megamult Tag'
+                }
+            },
+            bunc_consumable_edition_bunc_glitter = {
+                ['name'] = 'Glitter',
+                ['text'] = {
+                    [1] = 'Create a {C:attention}Ultrachips Tag'
+                }
+            },
 
             -- Undiscovered
 
@@ -143,7 +171,6 @@ return {
             -- Booster Packs
 
             p_bunc_blind = {
-                ['group_name'] = 'Blind Pack',
                 ['name'] = 'Blind Pack',
                 ['text'] = {
                     [1] = 'Choose one of up to',
@@ -152,7 +179,6 @@ return {
                 }
             },
             p_bunc_virtual_normal = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
@@ -162,7 +188,6 @@ return {
                 }
             },
             p_bunc_virtual_jumbo = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Jumbo Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
@@ -172,7 +197,6 @@ return {
                 }
             },
             p_bunc_virtual_mega = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Mega Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
@@ -986,6 +1010,49 @@ return {
                     [4] = 'adjacent cards if possible'
                 }
             },
+            j_bunc_glue_gun = {
+                ['name'] = 'Glue Gun',
+                ['text'] = {
+                    [1] = 'Sell this card to',
+                    [2] = '{C:attention}link together{} #1# selected',
+                    [3] = 'playing cards'
+                }
+            },
+            j_bunc_taped = {
+                ['name'] = 'Taped Jokers',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} all',
+                    [2] = 'played cards in first',
+                    [3] = 'scored hand during',
+                    [4] = '{C:attention}Boss Blind{}'
+                }
+            },
+            j_bunc_rubber_band_ball = {
+                ['name'] = 'Rubber Band Ball',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult per {C:attention}link{}',
+                    [2] = 'created this run',
+                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                }
+            },
+            j_bunc_headache = {
+                ['name'] = 'Headache',
+                ['text'] = {
+                    [1] = 'Create a {C:bunco_virtual_dark}Polymino{} card',
+                    [2] = 'for each {C:attention}#1#{} playing cards',
+                    [3] = 'destroyed {C:inactive}(Must have room)',
+                    [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# cards destroyed)'
+                }
+            },
+            j_bunc_jumper = {
+                ['name'] = 'Jumper',
+                ['text'] = {
+                    [1] = 'Gains {C:chips}+#1#{} Chips',
+                    [2] = 'if played hand',
+                    [3] = 'contains a {C:attention}Flush{}',
+                    [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                }
+            },
 
             -- Exotic Jokers
 
@@ -1294,6 +1361,10 @@ return {
                     [2] = '{C:attention}Boss Blind{}, add #1#',
                     [3] = 'random {C:bunco_exotic,T:bunc_exotic_cards}#2#',
                     [4] = 'to your deck'
+                },
+                ['unlock'] = {
+                    [1] = 'Play {E:1,C:attention}5 different suits',
+                    [2] = 'in a single hand'
                 }
             },
             b_bunc_digital = {
