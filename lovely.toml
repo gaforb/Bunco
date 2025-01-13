@@ -2568,12 +2568,12 @@ else
         info_queue[#info_queue + 1] = {
         key = (v == 'foil') and 'tag_bunc_chips'
         or (v == 'holo') and 'tag_bunc_mult'
-        or (v == 'polychrome') and 'tag_bunc_xmult'
+        or (v == 'polychrome') and 'tag_bunc_xmult',
 #       or (v == 'bunc_glitter') and 'tag_bunc_xchips',
         set = 'Tag',
         specific_vars = (v == 'foil') and {G.P_CENTERS.e_foil.config.extra}
         or (v == 'holo') and {G.P_CENTERS.e_holo.config.extra}
-        or (v == 'polychrome') and {G.P_CENTERS.e_polychrome.config.extra}
+        or (v == 'polychrome') and {G.P_CENTERS.e_polychrome.config.extra}}
 #       or (v == 'bunc_glitter') and {G.P_CENTERS.e_bunc_glitter.config.Xchips}}
     else
         info_queue[#info_queue + 1] = G.P_CENTERS['e_'..v]
