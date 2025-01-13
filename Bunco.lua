@@ -1193,7 +1193,7 @@ create_joker({ -- Prehistoric
     end
 })
 
---[[
+
 create_joker({ -- Linocut
     name = 'Linocut', position = 9,
     rarity = 'Uncommon', cost = 4,
@@ -1210,9 +1210,9 @@ create_joker({ -- Linocut
         end
     end
 })
---]]
 
---[[
+
+
 create_joker({ -- Ghost Print
     name = 'Ghost Print', position = 10,
     vars = {{last_hand = 'Nothing'}},
@@ -1244,7 +1244,7 @@ create_joker({ -- Ghost Print
         end
     end
 })
---]]
+
 
 --[[
 create_joker({ -- Loan Shark
@@ -2973,6 +2973,7 @@ create_joker({ -- Bounty Hunter
 })
 --]]
 
+--[[
 create_joker({ -- Mousetrap
     name = 'Mousetrap', position = 53,
     vars = {{chips = 300}, {odds = 3}},
@@ -3003,6 +3004,7 @@ create_joker({ -- Mousetrap
         end
     end
 })
+--]]
 
 create_joker({ -- The Joker
     name = 'The Joker', custom_atlas = 'bunco_jokers_the_joker', position = 1,
@@ -3644,6 +3646,7 @@ create_joker({ -- Fondue
     end
 })
 
+--[[
 create_joker({ -- Myopia
     type = 'Exotic',
     name = 'Myopia', position = 11,
@@ -3659,6 +3662,7 @@ create_joker({ -- Astigmatism
     blueprint = false, eternal = true,
     unlocked = true
 })
+--]]
 
 create_joker({ -- ROYGBIV
     type = 'Exotic',
