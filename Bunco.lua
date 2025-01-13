@@ -3921,7 +3921,7 @@ SMODS.Consumable{ -- Makemake
 -- Spectrals
 
 SMODS.Atlas({key = 'bunco_spectrals', path = 'Consumables/Spectrals.png', px = 71, py = 95})
-
+--[[
 SMODS.Consumable{ -- Cleanse
     set = 'Spectral', atlas = 'bunco_spectrals',
     key = 'cleanse',
@@ -3958,7 +3958,7 @@ SMODS.Consumable{ -- Cleanse
         card:juice_up(0.3, 0.5)
     end
 }
-
+--]]
 -- Functions for Polyminoes
 
 SMODS.Atlas({key = 'bunco_link', path = 'Links/Link.png', px = 71, py = 95})
