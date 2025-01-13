@@ -2281,7 +2281,11 @@ target = 'functions/state_events.lua'
 pattern = "ease_to = G.GAME.chips + math.floor(hand_chips*mult),"
 position = 'at'
 match_indent = true
-payload = '''ease_to = G.GAME.chips + math.floor(hand_chips * mult) * (antiscore and -1 or 1),'''
+payload = '''
+
+ease_to = G.GAME.chips + math.floor(hand_chips * mult) * (antiscore and -1 or 1),
+
+'''
 
 # function get_new_boss() (Turquoise Shield 1/2)
 [[patches]]
@@ -2459,9 +2463,9 @@ if used_tarot.edition then
     elseif used_tarot.edition.polychrome then
         add_tag(Tag('tag_bunc_xmult'))
         play_sound('generic1')
-    elseif used_tarot.edition.bunc_glitter then
-        add_tag(Tag('tag_bunc_xchips'))
-        play_sound('generic1')
+#   elseif used_tarot.edition.bunc_glitter then
+#       add_tag(Tag('tag_bunc_xchips'))
+#       play_sound('generic1')
     end
 end
 
@@ -2532,7 +2536,7 @@ match_indent = true
 payload = '''
 
 local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
-{'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
+{'e_holo', 'e_foil', 'e_polychrome'}) #, 'e_bunc_glitter'
 if not card.edition then
     for _, card_type in ipairs(SMODS.ConsumableType.ctype_buffer) do
         if card.ability.set == card_type then
@@ -2558,19 +2562,19 @@ if not _c.consumeable then
 else
     if v == 'foil'
     or v == 'holo'
-    or v == 'polychrome'
-    or v == 'bunc_glitter' then
+    or v == 'polychrome' then
+#   or v == 'bunc_glitter' then
         info_queue[#info_queue + 1] = G.P_CENTERS['bunc_consumable_edition_'..v]
         info_queue[#info_queue + 1] = {
         key = (v == 'foil') and 'tag_bunc_chips'
         or (v == 'holo') and 'tag_bunc_mult'
         or (v == 'polychrome') and 'tag_bunc_xmult'
-        or (v == 'bunc_glitter') and 'tag_bunc_xchips',
+#       or (v == 'bunc_glitter') and 'tag_bunc_xchips',
         set = 'Tag',
         specific_vars = (v == 'foil') and {G.P_CENTERS.e_foil.config.extra}
         or (v == 'holo') and {G.P_CENTERS.e_holo.config.extra}
         or (v == 'polychrome') and {G.P_CENTERS.e_polychrome.config.extra}
-        or (v == 'bunc_glitter') and {G.P_CENTERS.e_bunc_glitter.config.Xchips}}
+#       or (v == 'bunc_glitter') and {G.P_CENTERS.e_bunc_glitter.config.Xchips}}
     else
         info_queue[#info_queue + 1] = G.P_CENTERS['e_'..v]
     end
@@ -2598,53 +2602,53 @@ end
 '''
 
 # Fluorescent edition 1/3
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = "if self.facing == 'front' then"
-position = 'after'
-match_indent = true
-payload = '''
+#[[patches]]
+#[patches.pattern]
+#target = 'card.lua'
+#pattern = "if self.facing == 'front' then"
+#position = 'after'
+#match_indent = true
+#payload = '''
 
-if (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and self.edition and self.edition.bunc_fluorescent then
-    return
-end
+#if (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and self.edition and self.edition.bunc_fluorescent then
+#    return
+#end
 
-'''
+#'''
 
 # Fluorescent edition 2/3
-[[patches]]
-[patches.pattern]
-target = 'cardarea.lua'
-pattern = "function CardArea:remove_from_highlighted(card, force)"
-position = 'after'
-match_indent = true
-payload = '''
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#pattern = "function CardArea:remove_from_highlighted(card, force)"
+#position = 'after'
+#match_indent = true
+#payload = '''
 
-if card.edition and card.edition.bunc_fluorescent then
-    card.ability.forced_selection = false
-end
+#if card.edition and card.edition.bunc_fluorescent then
+#    card.ability.forced_selection = false
+#end
 
-'''
+#'''
 
 # Fluorescent edition 3/3
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = "function Card:set_debuff(should_debuff)"
-position = 'after'
-match_indent = true
-payload = '''
+#[[patches]]
+#[patches.pattern]
+#target = 'card.lua'
+#pattern = "function Card:set_debuff(should_debuff)"
+#position = 'after'
+#match_indent = true
+#payload = '''
 
-if self.edition and self.edition.bunc_fluorescent then
-    if self.debuff then
-        self.debuff = false
-        if self.area == G.jokers then self:add_to_deck(true) end
-    end
-    return
-end
+#if self.edition and self.edition.bunc_fluorescent then
+#    if self.debuff then
+#        self.debuff = false
+#        if self.area == G.jokers then self:add_to_deck(true) end
+#    end
+#    return
+#end
 
-'''
+#'''
 
 # function Blind:press_play() (Hedge Trimmer)
 [[patches]]
