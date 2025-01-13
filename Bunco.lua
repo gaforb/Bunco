@@ -3208,7 +3208,7 @@ create_joker({ -- Domino
     end
 })
 --]]
-
+--[[
 create_joker({ -- Glue Gun
     name = 'Glue Gun', position = 56,
     vars = {{amount = 4}},
@@ -3233,7 +3233,8 @@ create_joker({ -- Glue Gun
         end
     end
 })
-
+--]]
+--[[
 create_joker({ -- Taped
     name = 'Taped', custom_atlas = 'bunco_jokers_taped', position = 1,
     rarity = 'Rare', cost = 6,
@@ -3284,7 +3285,8 @@ create_joker({ -- Taped
         return self.set_ability(self, card)
     end
 })
-
+--]]
+--[[
 create_joker({ -- Rubber Band Ball
     name = 'Rubber Band Ball', position = 57,
     vars = {{bonus = 1}, {xmult = 1}},
@@ -3313,7 +3315,8 @@ create_joker({ -- Rubber Band Ball
         return G.GAME.last_card_group
     end,
 })
-
+--]]
+--[[
 create_joker({ -- Headache
     name = 'Headache', custom_atlas = 'bunco_jokers_headache', position = 1,
     vars = {{amount = 4}, {destroyed = 0}},
@@ -3344,7 +3347,8 @@ create_joker({ -- Headache
         end
     end
 })
-
+--]]
+--[[
 create_joker({ -- Games Collector
     name = 'Games Collector', position = 58,
     vars = {{bonus = 10}, {chips = 0}},
@@ -3384,7 +3388,7 @@ create_joker({ -- Games Collector
         return G.GAME.last_card_group
     end
 })
-
+--]]
 create_joker({ -- Jumper
     name = 'Jumper', position = 59,
     vars = {{bonus = 10}, {chips = 0}},
@@ -5890,6 +5894,7 @@ SMODS.Tag{ -- Breaking
     end
 }
 
+--[[
 SMODS.Tag{ -- Arcade
     key = 'arcade',
     loc_vars = function(self, info_queue)
@@ -5929,6 +5934,7 @@ SMODS.Tag{ -- Arcade
         end
     end
 }
+--]]
 
 SMODS.Tag{ -- Triple
     key = 'triple',
@@ -5959,7 +5965,7 @@ SMODS.Tag{ -- Triple
     in_pool = function() return G.GAME.used_vouchers['v_bunc_pin_collector'] end
 }
 
-
+--[[
 SMODS.Tag{ -- Glitter
     key = 'glitter',
 
@@ -5996,9 +6002,9 @@ SMODS.Tag{ -- Glitter
     pos = coordinate(1),
     atlas = 'bunco_tags_edition',
 }
+--]]
 
-
-
+--[[
 SMODS.Tag{ -- Fluorescent
     key = 'fluorescent',
 
@@ -6043,7 +6049,7 @@ SMODS.Tag{ -- Fluorescent
         end
     end
 }
-
+--]]
 
 SMODS.Tag{ -- Chips
     key = 'chips',
@@ -6132,7 +6138,7 @@ SMODS.Tag{ -- Xmult
     in_pool = function() return false end
 }
 
-
+--[[
 SMODS.Tag{ -- Xchip
     key = 'xchips',
 
@@ -6161,7 +6167,7 @@ SMODS.Tag{ -- Xchip
 
     in_pool = function() return false end
 }
-
+--]]
 
 SMODS.Tag{ -- Filigree
     key = 'filigree',
@@ -6429,7 +6435,7 @@ SMODS.Tag{ -- Rental
 
 -- Editions
 
-
+--[[
 SMODS.Shader({key = 'glitter', path = 'glitter.fs'})
 SMODS.Sound({key = 'glitter', path = 'glitter.ogg'})
 
@@ -6481,7 +6487,7 @@ SMODS.Edition{
 
     shader = 'fluorescent'
 }
-
+--]]
 -- Vouchers
 
 SMODS.Atlas({key = 'bunco_vouchers', path = 'Vouchers/Vouchers.png', px = 71, py = 95})
